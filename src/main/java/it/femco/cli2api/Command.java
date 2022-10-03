@@ -1,5 +1,11 @@
-package it.femco.cli2api;/**
+package it.femco.cli2api;
+
+/**
  * @author Molok
  * @version 30/09/22 01:02
- */public interface Command {
+ *
+ * Main representation of a CLI Software Solution.
+ */
+public interface Command {
+    Response call(String... parameters);
 }
