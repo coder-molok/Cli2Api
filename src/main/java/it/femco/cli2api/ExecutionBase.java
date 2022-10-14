@@ -45,8 +45,8 @@ public class ExecutionBase implements Execution {
 
     @Override
     public String[] getCLICommand() {
-        String[] cmd = new String[this.parameters+1];
-        cmd[0] = this.spell;
-        Arrays.setAll(cmd, (int i) -> i==0?thi);
+        String[] cmd = new String[this.parameters.length+1];
+        Arrays.setAll(cmd, (int i) -> i==0?this.spell:this.parameters[i-1]);
+        return cmd;
     }
 }
