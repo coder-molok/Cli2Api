@@ -20,10 +20,15 @@ public class CommandBase implements Command {
     public Response call(String... parameters) {
         Execution execution = ExecutionFactory.getExecution(this.spell, parameters);
 
-        return CommandBase.run(execution);
+        return run(execution);
     }
 
-    private static Response run(Execution execution) {
+    @Override
+    public ResponseBuilder getResponseBuilder() {
+        return new PlainTextResponseBuilder();
+    }
+
+    private Response run(Execution execution) {
         Process process = null;
         try {
             process = Runtime.getRuntime().exec(execution.getCLICommand());
@@ -31,28 +36,7 @@ public class CommandBase implements Command {
             // todo: append in the Response Error
             execution.fails(e);
         }
-        return new Response(execution, buildResponse(execution, process));
-    }
-
-    private static Output buildResponse(Execution execution, Process process) {
-        StringBuffer outputText = new StringBuffer();
-        Output output = new Output(outputText);
-        while (process.isAlive()) {
-            getAvailableOutput(process, outputText);
-        }
-        getAvailableOutput(process, outputText);
-        return output;
-    }
-
-    private static void getAvailableOutput(Process process, StringBuffer outputText) {
-        try {
-            if (process.getInputStream().available()>0) {
-                outputText.append(new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8));
-            }
-        } catch (IOException e) {
-            // todo: append in the Response Error
-            throw new RuntimeException(e);
-        }
+        return getResponseBuilder().buildResponse(execution, process);
     }
 
     public static BufferedReader getResults(Process process) throws IOException {

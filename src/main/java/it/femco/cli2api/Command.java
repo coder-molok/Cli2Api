@@ -8,4 +8,6 @@ package it.femco.cli2api;
  */
 public interface Command {
     Response call(String... parameters);
+
+    ResponseBuilder getResponseBuilder();
 }
