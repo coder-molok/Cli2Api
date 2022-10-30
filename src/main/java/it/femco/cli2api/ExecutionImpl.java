@@ -7,12 +7,12 @@ import java.util.Arrays;
  * @author Molok
  * @version 03/10/22 13:53
  */
-public class ExecutionBase implements Execution {
+public class ExecutionImpl implements Execution {
     private final String[] parameters;
     private String spell;
     private IOException failureCause;
 
-    public ExecutionBase(String commandSpell, String[] parameters) {
+    public ExecutionImpl(String commandSpell, String[] parameters) {
         this.spell = commandSpell;
         this.parameters = parameters;
         this.failureCause = null;

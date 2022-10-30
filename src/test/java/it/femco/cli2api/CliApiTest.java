@@ -1,6 +1,11 @@
 package it.femco.cli2api;
 
+import it.femco.cli2api.basics.SimpleCommand;
+import it.femco.cli2api.basics.TokenizedCommand;
 import junit.framework.TestCase;
+
+import java.util.Arrays;
+import java.util.HashMap;
 
 /**
  * @author Molok
@@ -10,7 +15,7 @@ public class CliApiTest extends TestCase {
     public void testSimpleCall() {
         // simulate a ECHO command
         String spell = "echo";
-        Command cmd = new CommandBase(spell);
+        Command cmd = new SimpleCommand(spell);
 
         assertNotNull(cmd);
 
@@ -47,11 +52,11 @@ public class CliApiTest extends TestCase {
         assertNotNull(resp.Output());
         assertEquals(parameter+"\n", resp.Output().GetRaw());
         assertFalse(resp.Output().keySet().isEmpty());
-    }
-
-    private class TokenizedCommand extends CommandBase implements Command {
-        public TokenizedCommand(String commandSpell) {
-            super(commandSpell);
-        }
+        assertTrue(resp.Output().containsKey(TokenizedCommand.TOKENS_COUNT));
+        assertEquals(3, resp.Output().getOrDefault(TokenizedCommand.TOKENS_COUNT, -1));
+        assertEquals("text", resp.Output().getOrDefault("0",null));
+        assertEquals("to", resp.Output().getOrDefault("1",null));
+        assertEquals("repeat", resp.Output().getOrDefault("2",null));
+        assertFalse(resp.Output().containsKey("3"));
     }
 }

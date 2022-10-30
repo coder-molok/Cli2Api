@@ -6,6 +6,6 @@ package it.femco.cli2api;
  */
 public class ExecutionFactory {
     public static Execution getExecution(String commandSpell, String[] parameters) {
-        return new ExecutionBase(commandSpell, parameters);
+        return new ExecutionImpl(commandSpell, parameters);
     }
 }

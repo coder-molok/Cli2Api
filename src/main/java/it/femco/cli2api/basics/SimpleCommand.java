@@ -1,18 +1,19 @@
-package it.femco.cli2api;
+package it.femco.cli2api.basics;
+
+import it.femco.cli2api.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 
 /**
  * @author Molok
  * @version 30/09/22 01:15
  */
-public class CommandBase implements Command {
+public class SimpleCommand implements Command {
     private final String spell;
 
-    public CommandBase(String commandSpell) {
+    public SimpleCommand(String commandSpell) {
         this.spell = commandSpell;
     }
 
