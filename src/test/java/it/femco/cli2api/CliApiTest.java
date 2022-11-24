@@ -6,6 +6,8 @@ import junit.framework.TestCase;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Molok
@@ -32,6 +34,23 @@ public class CliApiTest extends TestCase {
         assertNotNull(resp.Output());
         assertEquals(parameter+"\n", resp.Output().GetRaw());
     }
+    public void testSimpleCall_failure() {
+        // simulate a ECHO command
+        String spell = "ecx";
+        Command cmd = new SimpleCommand(spell);
+
+        String parameter = "text to repeat";
+        Response resp = cmd.call(parameter);
+
+        assertNotNull(resp);
+        assertNotNull(resp.Execution());
+        assertTrue(resp.Execution().isCompleted());
+        assertFalse(resp.Execution().isSuccess());
+        assertNotNull(resp.Error());
+        assertEquals(2, resp.Error().getErrorCode());
+        assertEquals("Cannot run program \"ecx\": , File o directory non esistente", resp.Error().getMessage());
+    }
+
     public void testTokenizedCall() {
         // simulate a ECHO command
         String spell = "echo";

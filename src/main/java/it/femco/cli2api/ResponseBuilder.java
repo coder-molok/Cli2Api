@@ -2,6 +2,8 @@ package it.femco.cli2api;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Molok
@@ -12,8 +14,7 @@ public interface ResponseBuilder {
         try {
             if (process.getInputStream().available()>0) {
                 byte[] buffer = process.getInputStream().readAllBytes();
-                String buff2 = new String(buffer, StandardCharsets.UTF_8);
-                return buff2;
+                return new String(buffer, StandardCharsets.UTF_8);
             }
         } catch (IOException e) {
             // todo: append in the Response Error
@@ -27,5 +28,21 @@ public interface ResponseBuilder {
         }
     }
 
+    default Response build(Execution execution, Process process) {
+        if (process != null && execution.isSuccess()) {
+            return this.buildResponse(execution, process);
+        }
+        Map<String, Object> errorOutput;
+        if (!execution.isSuccess()) {
+            errorOutput = execution.getCliError();
+        } else {
+            errorOutput = Map.of(
+                    CliError.ERROR_CODE, 0,
+                    CliError.ERROR_MSG, "No process instance.",
+                    CliError.ERROR_EXCEPTION, new NullPointerException("Process is null")
+            );
+        }
+        return new Response(execution, new Output(null, errorOutput));
+    }
     Response buildResponse(Execution execution, Process process);
 }

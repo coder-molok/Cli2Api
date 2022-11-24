@@ -1,6 +1,7 @@
 package it.femco.cli2api;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 /**
  * @author Molok
@@ -26,4 +27,6 @@ public interface Execution {
     void fails(IOException e);
 
     String[] getCLICommand();
+
+    HashMap<String, Object> getCliError();
 }

@@ -2,6 +2,10 @@ package it.femco.cli2api;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Molok
@@ -48,5 +52,17 @@ public class ExecutionImpl implements Execution {
         String[] cmd = new String[this.parameters.length+1];
         Arrays.setAll(cmd, (int i) -> i==0?this.spell:this.parameters[i-1]);
         return cmd;
+    }
+
+    @Override
+    public HashMap<String, Object> getCliError() {
+        Pattern errorNum = Pattern.compile("(?<msgbefore>.* )error=(?<code>\\d+)(?<msgafter>\\D.*)?");
+        Matcher match = errorNum.matcher(failureCause.getMessage());
+        match.matches();
+        return new HashMap<>(Map.of(
+                CliError.ERROR_CODE, match.group("code"),
+                CliError.ERROR_MSG, match.group("msgbefore")+match.group("msgafter"),
+                CliError.ERROR_EXCEPTION, failureCause
+        ));
     }
 }

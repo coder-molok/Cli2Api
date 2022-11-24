@@ -37,7 +37,7 @@ public class SimpleCommand implements Command {
             // todo: append in the Response Error
             execution.fails(e);
         }
-        return getResponseBuilder().buildResponse(execution, process);
+        return getResponseBuilder().build(execution, process);
     }
 
     public static BufferedReader getResults(Process process) throws IOException {
